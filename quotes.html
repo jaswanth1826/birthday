@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="quotes-page">
+  <script>
+    if (localStorage.getItem("birthday_access") !== "yes") {
+      window.location.href = "./index.html";
+    }
+  </script>
+
   <div class="sky">
     <div class="sun"></div>
     <div class="cloud cloud-1"></div>
@@ -37,11 +43,6 @@
     <p class="quote sub-quote">Happy Birthday, my love ✨</p>
   </div>
 
-  <script>
-    // Access check - redirect if not unlocked
-    if (!localStorage.getItem("birthday_access")) {
-      window.location.href = "index.html";
-    }
-  </script>
+  <script src="./app.js"></script>
 </body>
 </html>
