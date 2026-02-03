@@ -1,0 +1,157 @@
+/* ===== Index / Unlock page ===== */
+.wrap { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+.card { background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; max-width: 360px; }
+.card h1 { margin: 0 0 0.5rem; font-size: 1.5rem; }
+.inputRow { display: flex; gap: 0.5rem; margin: 1rem 0; }
+.inputRow input { flex: 1; padding: 0.6rem; border: 1px solid #ddd; border-radius: 8px; }
+.inputRow button { padding: 0.6rem 1.2rem; background: #e91e63; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+.err { display: none; color: #c62828; margin-top: 0.5rem; font-size: 0.9rem; }
+.small { color: #666; font-size: 0.8rem; margin-top: 0.5rem; }
+
+/* ===== Quotes page - Sky & layout ===== */
+.quotes-page {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', 'Georgia', serif;
+}
+
+.sky {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #ffecd2 0%,
+    #fcb69f 25%,
+    #ff9a9e 50%,
+    #a8edea 75%,
+    #6dd5ed 100%);
+  z-index: 0;
+}
+
+.sun {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, #fff9e6 0%, #ffd54f 40%, #ffb300 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px #ffb300, 0 0 120px rgba(255, 179, 0, 0.5);
+  animation: sunGlow 4s ease-in-out infinite;
+}
+
+@keyframes sunGlow {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.95; transform: translateX(-50%) scale(1.05); }
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  animation: cloudFloat 20s linear infinite;
+}
+.cloud-1 { width: 60px; height: 25px; top: 15%; left: 10%; animation-duration: 25s; animation-delay: 0s; }
+.cloud-2 { width: 90px; height: 35px; top: 25%; left: 60%; animation-duration: 30s; animation-delay: -5s; }
+.cloud-3 { width: 50px; height: 20px; top: 35%; left: 30%; animation-duration: 22s; animation-delay: -10s; }
+
+@keyframes cloudFloat {
+  0% { transform: translateX(-100px); opacity: 0.7; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateX(calc(100vw + 100px)); opacity: 0.7; }
+}
+
+/* Birds */
+.bird {
+  position: absolute;
+  font-size: 1.5rem;
+  z-index: 2;
+  animation: birdFly 15s linear infinite;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+.bird-1 { top: 18%; animation-duration: 12s; animation-delay: 0s; }
+.bird-2 { top: 28%; animation-duration: 18s; animation-delay: -3s; }
+.bird-3 { top: 22%; animation-duration: 14s; animation-delay: -6s; }
+.bird-4 { top: 35%; animation-duration: 16s; animation-delay: -9s; }
+.bird-5 { top: 12%; animation-duration: 20s; animation-delay: -12s; }
+
+@keyframes birdFly {
+  0% { transform: translateX(-80px) translateY(0) scaleX(1); }
+  25% { transform: translateX(25vw) translateY(-15px) scaleX(1); }
+  50% { transform: translateX(50vw) translateY(5px) scaleX(-1); }
+  75% { transform: translateX(75vw) translateY(-10px) scaleX(-1); }
+  100% { transform: translateX(calc(100vw + 80px)) translateY(0) scaleX(-1); }
+}
+
+/* Flowers - floating */
+.flower {
+  position: absolute;
+  font-size: 1.8rem;
+  z-index: 1;
+  animation: flowerFloat 12s ease-in-out infinite;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+}
+.flower-1 { left: 5%; top: 60%; animation-duration: 10s; animation-delay: 0s; }
+.flower-2 { left: 15%; top: 75%; animation-duration: 14s; animation-delay: -2s; }
+.flower-3 { left: 85%; top: 65%; animation-duration: 11s; animation-delay: -4s; }
+.flower-4 { left: 92%; top: 78%; animation-duration: 13s; animation-delay: -1s; }
+.flower-5 { left: 25%; top: 85%; animation-duration: 12s; animation-delay: -6s; }
+.flower-6 { left: 70%; top: 82%; animation-duration: 15s; animation-delay: -3s; }
+.flower-7 { left: 45%; top: 90%; animation-duration: 10s; animation-delay: -5s; }
+.flower-8 { left: 55%; top: 88%; animation-duration: 16s; animation-delay: -7s; }
+
+@keyframes flowerFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+  25% { transform: translateY(-12px) translateX(8px) rotate(5deg); opacity: 1; }
+  50% { transform: translateY(-5px) translateX(-5px) rotate(-3deg); opacity: 0.95; }
+  75% { transform: translateY(-15px) translateX(5px) rotate(8deg); opacity: 1; }
+}
+
+/* Quotes - flowing / moving with the scene */
+.quotes-container {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.quote {
+  color: #2d3436;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+  margin: 0.5rem 0;
+  animation: quoteFlow 8s ease-in-out infinite;
+}
+
+.main-quote {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  animation: quoteFlow 6s ease-in-out infinite;
+  color: #6c5ce7;
+  text-shadow: 0 2px 20px rgba(255,255,255,0.9), 0 0 30px rgba(108, 92, 231, 0.3);
+}
+
+.sub-quote {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  opacity: 0.95;
+  animation: quoteFlow 7s ease-in-out infinite;
+}
+
+.sub-quote:nth-child(2) { animation-delay: 0.5s; }
+.sub-quote:nth-child(3) { animation-delay: 1s; }
+.sub-quote:nth-child(4) { animation-delay: 1.5s; }
+.sub-quote:nth-child(5) { animation-delay: 2s; }
+
+@keyframes quoteFlow {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+  33% { transform: translateY(-4px) scale(1.01); opacity: 0.98; }
+  66% { transform: translateY(2px) scale(0.99); opacity: 1; }
+}
