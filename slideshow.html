@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Memories 💕</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="slideshow-page">
+  <script>
+    if (localStorage.getItem("birthday_access") !== "yes") {
+      window.location.href = "./index.html";
+    }
+  </script>
+
+  <div class="wrap">
+    <div class="card">
+      <h1>Our Memories 💕</h1>
+
+      <div id="frame" class="slideshowFrame">
+        <img id="slideImg" class="photo" src="./photos/1.jpg" alt="memory" />
+      </div>
+
+      <audio id="bgm" loop></audio>
+
+      <div class="controls">
+        <button id="playBtn">▶ Play Music</button>
+        <button id="pauseBtn">⏸ Pause</button>
+      </div>
+
+      <p class="small">Enjoy every moment 💫</p>
+    </div>
+  </div>
+
+  <script>
+    const images = [
+      "./photos/1.jpg",
+      "./photos/2.jpg",
+      "./photos/3.jpg",
+      "./photos/4.jpg",
+      "./photos/5.jpg"
+    ];
+
+    const songs = [
+      "./music.mp3",
+      "./music/Nene Kani Nenai Undaga-SenSongsMp3.Co.mp3"
+    ];
+
+    const imgEl = document.getElementById("slideImg");
+    let i = 0;
+
+    function nextImage() {
+      i = (i + 1) % images.length;
+      imgEl.style.opacity = 0;
+
+      setTimeout(() => {
+        imgEl.src = images[i];
+        imgEl.onload = () => { imgEl.style.opacity = 1; };
+      }, 300);
+    }
+
+    setInterval(nextImage, 3000);
+
+    const bgm = document.getElementById("bgm");
+    const pick = songs[Math.floor(Math.random() * songs.length)];
+    bgm.src = encodeURI(pick);
+    bgm.volume = 0.6;
+
+    if (localStorage.getItem("music_ok") === "yes") {
+      bgm.play().catch(() => {});
+    }
+
+    document.getElementById("playBtn").onclick = () => bgm.play();
+    document.getElementById("pauseBtn").onclick = () => bgm.pause();
+  </script>
+</body>
+</html>

@@ -150,8 +150,77 @@
 .sub-quote:nth-child(4) { animation-delay: 1.5s; }
 .sub-quote:nth-child(5) { animation-delay: 2s; }
 
+.next-btn {
+  margin-top: 18px;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #e91e63, #9c27b0);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.next-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+}
+
 @keyframes quoteFlow {
   0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
   33% { transform: translateY(-4px) scale(1.01); opacity: 0.98; }
   66% { transform: translateY(2px) scale(0.99); opacity: 1; }
+}
+
+/* ===== Slideshow page ===== */
+.slideshow-page {
+  background: radial-gradient(circle at top, #ff6aa2 0%, #8a2be2 45%, #0b0b10 100%);
+  min-height: 100vh;
+}
+
+.slideshow-page .wrap {
+  padding: 2rem 1rem;
+}
+
+.slideshow-page .card {
+  max-width: 500px;
+}
+
+.slideshow-page .card h1 {
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.slideshowFrame {
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 1rem 0;
+  background: #000;
+}
+
+.slideshowFrame .photo {
+  width: 100%;
+  display: block;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.slideshow-page .controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.slideshow-page .controls button {
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.slideshow-page .small {
+  color: rgba(255,255,255,0.9);
 }
