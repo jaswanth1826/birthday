@@ -17,7 +17,7 @@
     }
   </script>
 
-  <audio id="bgm" loop></audio>
+  <audio id="bgm" preload="auto" playsinline loop></audio>
 
   <!-- ====== SECTION 1: QUOTES ====== -->
   <section id="quotesSection">
@@ -89,6 +89,10 @@
     const slideImg = document.getElementById("slideImg");
     const bgm = document.getElementById("bgm");
 
+    bgm.volume = 0.7;
+    bgm.src = encodeURI(songs[Math.floor(Math.random() * songs.length)]);
+    bgm.load();
+
     setTimeout(() => {
       nextBtn.style.display = "inline-block";
     }, 15000);
@@ -107,18 +111,19 @@
       setInterval(nextImage, 3000);
     }
 
-    function startMusic() {
-      const pick = songs[Math.floor(Math.random() * songs.length)];
-      bgm.src = encodeURI(pick);
-      bgm.volume = 0.65;
-      bgm.play().catch(() => {});
+    async function startMusic() {
+      try {
+        await bgm.play();
+      } catch (e) {}
     }
 
-    nextBtn.addEventListener("click", () => {
+    nextBtn.addEventListener("click", async () => {
       startMusic();
       quotesSection.classList.add("hidden");
       slideshowSection.classList.remove("hidden");
       startSlideshow();
+      document.addEventListener("touchstart", () => startMusic(), { once: true });
+      document.addEventListener("click", () => startMusic(), { once: true });
     });
   </script>
 </body>
