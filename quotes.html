@@ -42,21 +42,23 @@
     <p class="quote sub-quote">So grateful for you</p>
     <p class="quote sub-quote">Happy Birthday, my love ✨</p>
 
-    <button id="nextBtn" class="btn next-btn" style="display:none;">
+    <button id="nextBtn" class="next-btn" style="display:none;">
       Inka entha sepu chusthav? Next page ki vellava 😌👉
     </button>
   </div>
 
-  <script src="./app.js"></script>
   <script>
-    const btn = document.getElementById("nextBtn");
-    setTimeout(() => {
-      btn.style.display = "inline-block";
-    }, 15000);
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("nextBtn");
 
-    btn.addEventListener("click", () => {
-      localStorage.setItem("music_ok", "yes");
-      window.location.href = "./slideshow.html";
+      setTimeout(() => {
+        btn.style.display = "inline-block";
+      }, 15000);
+
+      btn.addEventListener("click", () => {
+        localStorage.setItem("music_ok", "yes");
+        window.location.href = "./slideshow.html";
+      });
     });
   </script>
 </body>

@@ -13,6 +13,10 @@
     }
   </script>
 
+  <div id="musicOverlay" class="music-overlay">
+    <p>Tap anywhere to play music 🎵</p>
+  </div>
+
   <div class="wrap">
     <div class="card">
       <h1>Our Memories 💕</h1>
@@ -62,15 +66,20 @@
     setInterval(nextImage, 3000);
 
     const bgm = document.getElementById("bgm");
+    const overlay = document.getElementById("musicOverlay");
     const pick = songs[Math.floor(Math.random() * songs.length)];
     bgm.src = encodeURI(pick);
     bgm.volume = 0.6;
 
-    if (localStorage.getItem("music_ok") === "yes") {
+    function startMusic() {
       bgm.play().catch(() => {});
+      overlay.classList.add("hidden");
     }
 
-    document.getElementById("playBtn").onclick = () => bgm.play();
+    overlay.addEventListener("click", startMusic);
+    overlay.addEventListener("touchend", (e) => { e.preventDefault(); startMusic(); }, { passive: false });
+
+    document.getElementById("playBtn").onclick = () => { startMusic(); };
     document.getElementById("pauseBtn").onclick = () => bgm.pause();
   </script>
 </body>
