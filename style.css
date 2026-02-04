@@ -245,3 +245,44 @@
 .music-overlay.hidden {
   display: none !important;
 }
+
+/* ===== Slideshow section (one-page quotes.html) ===== */
+#slideshowSection {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #ff6aa2 0%, #8a2be2 45%, #0b0b10 100%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#slideshowSection .slideshow-wrap {
+  padding: 2rem 1rem;
+}
+
+#slideshowSection .card {
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+#slideshowSection .card h1 {
+  color: #6c5ce7;
+  text-shadow: none;
+}
+
+#slideshowSection .slideshowFrame {
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 1rem 0;
+  background: #000;
+}
+
+#slideshowSection .slideshowFrame .photo {
+  width: 100%;
+  display: block;
+}
+
+#slideshowSection .small {
+  color: #666;
+}
