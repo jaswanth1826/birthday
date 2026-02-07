@@ -90,7 +90,28 @@
       "./photos/2.jpg",
       "./photos/3.jpg",
       "./photos/4.jpg",
-      "./photos/5.jpg"
+      "./photos/5.jpg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (1).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (2).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (3).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (4).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM.jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (1).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (2).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (3).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (4).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM.jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM (1).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM (2).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM (3).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM.jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.28 PM (1).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.28 PM (2).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.28 PM.jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.29 PM (1).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.29 PM (2).jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.29 PM.jpeg",
+      "./photos/WhatsApp Image 2026-02-07 at 3.56.30 PM.jpeg"
     ];
 
     const songs = [
@@ -121,7 +142,7 @@
       i = (i + 1) % images.length;
       slideImg.style.opacity = 0;
       setTimeout(() => {
-        slideImg.src = images[i];
+        slideImg.src = encodeURI(images[i]);
         slideImg.onload = () => slideImg.style.opacity = 1;
       }, 250);
       shown++;
