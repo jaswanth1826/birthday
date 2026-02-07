@@ -1,5 +1,15 @@
 /* ===== Index / Unlock page ===== */
 .wrap { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+
+#dobSection {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 100;
+}
+
+#dobSection .card h1 { color: #333; }
+#dobSection .small { color: rgba(255,255,255,0.9); }
 .card { background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; max-width: 360px; }
 .card h1 { margin: 0 0 0.5rem; font-size: 1.5rem; }
 .inputRow { display: flex; gap: 0.5rem; margin: 1rem 0; }

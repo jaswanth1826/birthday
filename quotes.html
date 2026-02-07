@@ -11,16 +11,24 @@
   </style>
 </head>
 <body class="quotes-page">
-  <script>
-    if (localStorage.getItem("birthday_access") !== "yes") {
-      window.location.href = "./index.html";
-    }
-  </script>
-
   <audio id="bgm" preload="auto" playsinline loop></audio>
 
+  <!-- ====== SECTION 0: DOB FORM ====== -->
+  <section id="dobSection" class="wrap">
+    <div class="card">
+      <h1>Unlock Your Birthday Surprise 🎁</h1>
+      <p>Enter your Date of Birth to continue</p>
+      <div class="inputRow">
+        <input id="dob" type="text" placeholder="DD-MM-YYYY (example: 01-01-2000)" />
+        <button id="unlockBtn">Unlock</button>
+      </div>
+      <div id="err" class="err">Oops — wrong DOB. Try again 🙂</div>
+      <div class="small">Tip: Use 01-01-2000, 01/01/2000, or YYYY-MM-DD.</div>
+    </div>
+  </section>
+
   <!-- ====== SECTION 1: QUOTES ====== -->
-  <section id="quotesSection">
+  <section id="quotesSection" class="hidden">
     <div class="sky">
       <div class="sun"></div>
       <div class="cloud cloud-1"></div>
@@ -85,6 +93,42 @@
   </section>
 
   <script>
+    const CORRECT_DOB = "2000-01-01";
+    function normalizeDOB(value) {
+      if (!value) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+      const m = value.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);
+      if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+      return value;
+    }
+
+    const dobSection = document.getElementById("dobSection");
+    const dobInput = document.getElementById("dob");
+    const errEl = document.getElementById("err");
+    const unlockBtn = document.getElementById("unlockBtn");
+
+    if (localStorage.getItem("birthday_access") === "yes") {
+      dobSection.classList.add("hidden");
+      document.getElementById("quotesSection").classList.remove("hidden");
+    }
+
+    function unlockAndShowQuotes() {
+      const userDOB = normalizeDOB(dobInput.value.trim());
+      if (userDOB !== CORRECT_DOB) {
+        errEl.style.display = "block";
+        return;
+      }
+      localStorage.setItem("birthday_access", "yes");
+      startMusic();
+      dobSection.classList.add("hidden");
+      document.getElementById("quotesSection").classList.remove("hidden");
+    }
+
+    unlockBtn.addEventListener("click", unlockAndShowQuotes);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
+    });
+
     const images = [
       "./photos/1.jpg",
       "./photos/2.jpg",
@@ -114,11 +158,6 @@
       "./photos/WhatsApp Image 2026-02-07 at 3.56.30 PM.jpeg"
     ];
 
-    const songs = [
-      "./music.mp3",
-      "./music/Nene Kani Nenai Undaga-SenSongsMp3.Co.mp3"
-    ];
-
     const nextBtn = document.getElementById("nextBtn");
     const quotesSection = document.getElementById("quotesSection");
     const slideshowSection = document.getElementById("slideshowSection");
@@ -127,8 +166,14 @@
     const bgm = document.getElementById("bgm");
 
     bgm.volume = 0.7;
-    bgm.src = encodeURI(songs[Math.floor(Math.random() * songs.length)]);
-    bgm.load();
+    const songs = [
+      "./music.mp3",
+      "./music/Nene Kani Nenai Undaga-SenSongsMp3.Co.mp3"
+    ];
+    if (!bgm.src || bgm.src === window.location.href) {
+      bgm.src = encodeURI(songs[Math.floor(Math.random() * songs.length)]);
+      bgm.load();
+    }
 
     setTimeout(() => {
       nextBtn.style.display = "inline-block";
