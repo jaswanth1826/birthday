@@ -5,240 +5,357 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Birthday Surprise 💕</title>
 
-  <link rel="stylesheet" href="style.css?v=10" />
-
   <style>
-    .hidden { display: none !important; }
-    #slideImg { transition: opacity 0.6s ease-in-out; }
+    /* ================= GLOBAL ================= */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ================= DREAM BACKGROUND ================= */
+    .dream-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(to top, #0b1d3a, #2b6cb0, #87ceeb);
+    }
+
+    /* Sun Glow */
+    .sun {
+      position: absolute;
+      top: 8%;
+      left: 15%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, #fff6b0, transparent 70%);
+      border-radius: 50%;
+      animation: pulse 4s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); opacity: 0.8; }
+      to   { transform: scale(1.2); opacity: 1; }
+    }
+
+    /* Mountains */
+    .mountain {
+      position: absolute;
+      bottom: 0;
+      width: 130%;
+      border-radius: 50%;
+    }
+
+    .m1 {
+      height: 50%;
+      left: -15%;
+      background: #0b132b;
+    }
+
+    .m2 {
+      height: 60%;
+      left: -25%;
+      background: #1c2541;
+      opacity: 0.9;
+    }
+
+    .m3 {
+      height: 40%;
+      left: -10%;
+      background: #3a506b;
+      opacity: 0.7;
+    }
+
+    /* Birds Flying */
+    .bird {
+      position: absolute;
+      font-size: 32px;
+      opacity: 0.8;
+      animation: fly 10s linear infinite;
+    }
+
+    .b1 { top: 20%; left: -10%; animation-delay: 0s; }
+    .b2 { top: 30%; left: -15%; animation-delay: 3s; }
+    .b3 { top: 15%; left: -20%; animation-delay: 6s; }
+
+    @keyframes fly {
+      from { transform: translateX(0); }
+      to   { transform: translateX(130vw); }
+    }
+
+    /* ================= CARD ================= */
+    .wrap {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 35px;
+      border-radius: 25px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      color: white;
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 420px;
+    }
+
+    input {
+      padding: 12px;
+      width: 70%;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.3);
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: rgba(255,255,255,0.5);
+    }
+
+    /* ================= QUOTES ================= */
+    .quotes-container {
+      text-align: center;
+      padding-top: 100px;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+    }
+
+    .main-quote {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .sub-quote {
+      font-size: 1.4rem;
+      margin: 15px 0;
+    }
+
+    .next-btn {
+      margin-top: 40px;
+      padding: 15px 25px;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ================= SLIDESHOW ================= */
+    .slideshowFrame img {
+      width: 100%;
+      border-radius: 20px;
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    /* ================= FINAL PAGE ================= */
+    .final-page {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+    }
+
+    canvas {
+      position: absolute;
+      inset: 0;
+    }
+
+    .finalText {
+      position: absolute;
+      top: 35%;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 2rem;
+      text-shadow: 0 0 15px black;
+    }
   </style>
 </head>
 
-<body class="quotes-page">
+<body>
 
-  <!-- ✅ MUSIC FILE PATH FIXED -->
-  <!-- File must be here: music/music.mp3 -->
+  <!-- 🌄 Background -->
+  <div class="dream-bg">
+    <div class="sun"></div>
+    <div class="bird b1">🕊️</div>
+    <div class="bird b2">🕊️</div>
+    <div class="bird b3">🕊️</div>
+    <div class="mountain m1"></div>
+    <div class="mountain m2"></div>
+    <div class="mountain m3"></div>
+  </div>
+
+  <!-- 🎵 Music -->
   <audio id="bgm" preload="auto" playsinline loop>
     <source src="./music/music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- ================= SECTION 0: DOB ================= -->
+  <!-- ===== SECTION 0: DOB ===== -->
   <section id="dobSection" class="wrap">
     <div class="card">
       <h1>Unlock Your Birthday Surprise 🎁</h1>
-      <p>Enter your Date of Birth to continue</p>
+      <p>Enter your DOB to continue</p>
 
-      <div class="inputRow">
-        <input id="dob" type="text" placeholder="DD-MM-YYYY (example: 10-02-2000)" />
-        <button id="unlockBtn">Unlock</button>
-      </div>
+      <input id="dob" placeholder="10-02-2000" />
+      <button id="unlockBtn">Unlock 💖</button>
 
-      <div id="err" class="err" style="display:none;">
-        Oops — wrong DOB. Try again 🙂
-      </div>
-
-      <div class="small">
-        Tip: Use 10-02-2000 or YYYY-MM-DD.
-      </div>
+      <p id="err" style="display:none;">❌ Wrong DOB, try again!</p>
     </div>
   </section>
 
-  <!-- ================= SECTION 1: QUOTES ================= -->
+  <!-- ===== SECTION 1: QUOTES ===== -->
   <section id="quotesSection" class="hidden">
-
     <div class="quotes-container">
-      <h1 class="quote main-quote">Hi Bangaram 💕</h1>
-      <p class="quote sub-quote">You light up my world ✨</p>
-      <p class="quote sub-quote">Every moment with you is magical</p>
-      <p class="quote sub-quote">Happy Birthday, my love 🎂</p>
-      <p class="quote sub-quote">Forever thankful for you ❤️</p>
+      <h1 class="main-quote">Hi Chaturya 💕</h1>
+      <p class="sub-quote">You light up my world ✨</p>
+      <p class="sub-quote">Every moment with you is magical</p>
+      <p class="sub-quote">Happy Birthday, my love 🎂</p>
+      <p class="sub-quote">Forever thankful for you ❤️</p>
 
-      <!-- Next button appears after 15 seconds -->
-      <button id="nextBtn" style="display:none;" class="next-btn">
-        Inka entha sepu chusthav? Next page ki vellava 😌👉
+      <button id="nextBtn" class="next-btn" style="display:none;">
+        Inka entha sepu chusthav? Next ki vellava 😌👉
       </button>
     </div>
-
   </section>
 
-  <!-- ================= SECTION 2: SLIDESHOW ================= -->
-  <section id="slideshowSection" class="hidden">
-    <div class="wrap slideshow-wrap">
-      <div class="card">
-        <h1>Our Memories 💞</h1>
-
-        <div class="slideshowFrame">
-          <img id="slideImg" src="./photos/1.jpg" class="photo" />
-        </div>
-
-        <p class="small">Love you forever 💕</p>
+  <!-- ===== SECTION 2: SLIDESHOW ===== -->
+  <section id="slideshowSection" class="hidden wrap">
+    <div class="card">
+      <h1> 💞</h1>
+      <div class="slideshowFrame">
+        <img id="slideImg" src="./photos/1.jpg">
       </div>
     </div>
   </section>
 
-  <!-- ================= SECTION 3: FINAL FIREWORKS ================= -->
+  <!-- ===== SECTION 3: FINAL ===== -->
   <section id="finalSection" class="hidden final-page">
     <canvas id="fw"></canvas>
-
     <div class="finalText">
-      <h1>🎆 HAPPY BIRTHDAY 🎆</h1>
-      <h2>Bangaram 💕</h2>
-      <p>May your life always sparkle with joy ✨</p>
+      🎆 HAPPY BIRTHDAY 🎆 <br>
+      Chaturya 💕 <br>
+      May your life sparkle forever ✨
     </div>
   </section>
 
   <!-- ================= SCRIPT ================= -->
   <script>
-    const CORRECT_DOB = "2000-02-10";
+    const CORRECT_DOB = "10-02-2000";
 
-    function normalizeDOB(value) {
-      if (!value) return "";
-      const m = value.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);
-      if (m) return `${m[3]}-${m[2]}-${m[1]}`;
-      return value;
-    }
-
-    // Elements
+    const bgm = document.getElementById("bgm");
     const dobSection = document.getElementById("dobSection");
     const quotesSection = document.getElementById("quotesSection");
     const slideshowSection = document.getElementById("slideshowSection");
     const finalSection = document.getElementById("finalSection");
 
-    const dobInput = document.getElementById("dob");
     const unlockBtn = document.getElementById("unlockBtn");
+    const dobInput = document.getElementById("dob");
     const errEl = document.getElementById("err");
 
     const nextBtn = document.getElementById("nextBtn");
     const slideImg = document.getElementById("slideImg");
 
-    // Music
-    const bgm = document.getElementById("bgm");
-    bgm.volume = 0.8;
-
-    // ✅ Safari + Chrome working play
     function startMusic() {
-      bgm.play().catch(() => {
-        console.log("Autoplay blocked until user gesture");
-      });
+      bgm.volume = 0.8;
+      bgm.play().catch(() => console.log("Safari blocked autoplay"));
     }
 
-    // Unlock DOB
-    function unlockAndShowQuotes() {
-      errEl.style.display = "none";
-
-      const userDOB = normalizeDOB(dobInput.value.trim());
-
-      if (userDOB !== CORRECT_DOB) {
+    unlockBtn.addEventListener("click", () => {
+      if (dobInput.value.trim() !== CORRECT_DOB) {
         errEl.style.display = "block";
         return;
       }
 
-      // Start music ON CLICK (mobile requirement)
       startMusic();
 
-      // Show quotes
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
 
-      // Next button after 15 sec
       setTimeout(() => {
         nextBtn.style.display = "inline-block";
       }, 15000);
-    }
+    });
 
-    unlockBtn.addEventListener("click", unlockAndShowQuotes);
-
-    // ================= SLIDESHOW =================
-    const images = [
-      "./photos/1.jpg",
-      "./photos/2.jpg",
-      "./photos/3.jpg",
-      "./photos/4.jpg",
-      "./photos/5.jpg"
-    ];
-
+    const images = ["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg"];
     let idx = 0;
 
-    function startSlideshow() {
-      idx = 0;
-
-      const interval = setInterval(() => {
-        idx++;
-
-        if (idx >= images.length) {
-          clearInterval(interval);
-          showFinal();
-          return;
-        }
-
-        slideImg.style.opacity = 0;
-
-        setTimeout(() => {
-          slideImg.src = images[idx];
-          slideImg.style.opacity = 1;
-        }, 400);
-
-      }, 3000);
-    }
-
-    // Next button click
     nextBtn.addEventListener("click", () => {
       quotesSection.classList.add("hidden");
       slideshowSection.classList.remove("hidden");
-      startSlideshow();
+
+      setInterval(() => {
+        idx++;
+        if (idx >= images.length) {
+          slideshowSection.classList.add("hidden");
+          finalSection.classList.remove("hidden");
+          startFireworks();
+          return;
+        }
+        slideImg.src = "./photos/" + images[idx];
+      }, 2500);
     });
 
-    // ================= FINAL =================
-    function showFinal() {
-      slideshowSection.classList.add("hidden");
-      finalSection.classList.remove("hidden");
-      startFireworks();
-    }
-
-    // Fireworks animation
     function startFireworks() {
       const canvas = document.getElementById("fw");
       const ctx = canvas.getContext("2d");
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      let particles = [];
 
-      const particles = [];
-
-      function createFirework() {
-        for (let i = 0; i < 100; i++) {
+      function boom() {
+        for (let i = 0; i < 120; i++) {
           particles.push({
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            vx: (Math.random() - 0.5) * 8,
-            vy: (Math.random() - 0.5) * 8,
+            x: canvas.width/2,
+            y: canvas.height/2,
+            vx: (Math.random()-0.5)*10,
+            vy: (Math.random()-0.5)*10,
             life: 100
           });
         }
       }
 
       function animate() {
-        ctx.fillStyle = "rgba(0,0,0,0.2)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle="rgba(0,0,0,0.2)";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        particles.forEach((p, index) => {
-          p.x += p.vx;
-          p.y += p.vy;
+        particles.forEach((p,i)=>{
+          p.x+=p.vx;
+          p.y+=p.vy;
           p.life--;
 
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-          ctx.fillStyle = "gold";
+          ctx.arc(p.x,p.y,2,0,Math.PI*2);
+          ctx.fillStyle="gold";
           ctx.fill();
 
-          if (p.life <= 0) particles.splice(index, 1);
+          if(p.life<=0) particles.splice(i,1);
         });
 
         requestAnimationFrame(animate);
       }
 
-      createFirework();
+      boom();
       animate();
-      setInterval(createFirework, 2000);
+      setInterval(boom,2000);
     }
   </script>
 
