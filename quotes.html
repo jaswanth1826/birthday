@@ -4,13 +4,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Birthday Surprise 💕</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <style>
     .hidden { display: none !important; }
     #slideImg { transition: opacity 0.4s ease-in-out; }
   </style>
 </head>
+
 <body class="quotes-page">
+  <!-- Single audio element for the whole one-page experience -->
   <audio id="bgm" preload="auto" playsinline loop></audio>
 
   <!-- ====== SECTION 0: DOB FORM ====== -->
@@ -23,7 +28,7 @@
         <button id="unlockBtn">Unlock</button>
       </div>
       <div id="err" class="err">Oops — wrong DOB. Try again 🙂</div>
-      <div class="small">Tip: Use 01-01-2000, 01/01/2000, or YYYY-MM-DD.</div>
+      <div class="small">Tip: Use 10-02-2000, 10/02/2000, or YYYY-MM-DD.</div>
     </div>
   </section>
 
@@ -52,7 +57,7 @@
     </div>
 
     <div class="quotes-container">
-      <h1 class="quote main-quote">Hi Bangaram 💕</h1>
+      <h1 class="quote main-quote">Hi Chaturya 💕</h1>
       <p class="quote sub-quote">You light up my world</p>
       <p class="quote sub-quote">Every moment with you is magical</p>
       <p class="quote sub-quote">So grateful for you</p>
@@ -73,7 +78,7 @@
   <section id="slideshowSection" class="hidden">
     <div class="wrap slideshow-wrap">
       <div class="card">
-        <h1> 💕</h1>
+        <h1>💕</h1>
         <div class="slideshowFrame">
           <img id="slideImg" class="photo" src="./photos/1.jpg" alt="memory" />
         </div>
@@ -87,13 +92,14 @@
     <canvas id="fw"></canvas>
     <div class="finalText">
       <div class="hb">HAPPY BIRTHDAY 🎂</div>
-      <div class="name">Bangaram 💕</div>
+      <div class="name">Chaturya 💕</div>
       <div class="wish">May your life be full of love, laughter & magic ✨</div>
     </div>
   </section>
 
   <script>
-    const CORRECT_DOB = "2000-01-01";
+    // ===== DOB =====
+    const CORRECT_DOB = "2000-02-10";
     function normalizeDOB(value) {
       if (!value) return "";
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
@@ -102,26 +108,77 @@
       return value;
     }
 
+    // ===== Sections / Elements =====
     const dobSection = document.getElementById("dobSection");
+    const quotesSection = document.getElementById("quotesSection");
+    const slideshowSection = document.getElementById("slideshowSection");
+    const finalSection = document.getElementById("finalSection");
+
     const dobInput = document.getElementById("dob");
     const errEl = document.getElementById("err");
     const unlockBtn = document.getElementById("unlockBtn");
 
+    const nextBtn = document.getElementById("nextBtn");
+    const slideImg = document.getElementById("slideImg");
+
+    const bgm = document.getElementById("bgm");
+    bgm.volume = 0.7;
+
+    // Use ONE stable music file (recommended)
+    // Make sure this file exists in your repo root: /music.mp3
+    const MUSIC_FILE = "./music.mp3";
+
+    // ===== Cache-safe music start (works for all users) =====
+    async function startMusic(force = false) {
+      try {
+        if (!force && !bgm.paused) return;
+
+        // Reset stuck audio states (helps when reopened)
+        bgm.pause();
+        bgm.currentTime = 0;
+
+        // Cache-bust to avoid stale cached audio
+        bgm.src = MUSIC_FILE + "?v=" + Date.now();
+        bgm.load();
+
+        await bgm.play();
+      } catch (e) {
+        // If blocked, next user tap will start it
+      }
+    }
+
+    // Global fallback: first touch/click anywhere can start audio if needed
+    document.addEventListener("touchstart", () => startMusic(true), { once: true });
+    document.addEventListener("click", () => startMusic(true), { once: true });
+
+    // If already unlocked in same browser, go directly to quotes (music will start on first tap)
     if (localStorage.getItem("birthday_access") === "yes") {
       dobSection.classList.add("hidden");
-      document.getElementById("quotesSection").classList.remove("hidden");
+      quotesSection.classList.remove("hidden");
+      // show next after 15s
+      setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
     }
 
     function unlockAndShowQuotes() {
+      errEl.style.display = "none";
       const userDOB = normalizeDOB(dobInput.value.trim());
       if (userDOB !== CORRECT_DOB) {
         errEl.style.display = "block";
         return;
       }
       localStorage.setItem("birthday_access", "yes");
-      startMusic();
+
+      // Start music immediately on the Unlock click (mobile-friendly)
+      startMusic(true);
+
       dobSection.classList.add("hidden");
-      document.getElementById("quotesSection").classList.remove("hidden");
+      quotesSection.classList.remove("hidden");
+
+      // Next button appears after 15 seconds
+      nextBtn.style.display = "none";
+      setTimeout(() => {
+        nextBtn.style.display = "inline-block";
+      }, 15000);
     }
 
     unlockBtn.addEventListener("click", unlockAndShowQuotes);
@@ -129,6 +186,7 @@
       if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
     });
 
+    // ===== Photos (your list kept; encodeURI used while setting src) =====
     const images = [
       "./photos/1.jpg",
       "./photos/2.jpg",
@@ -158,39 +216,22 @@
       "./photos/WhatsApp Image 2026-02-07 at 3.56.30 PM.jpeg"
     ];
 
-    const nextBtn = document.getElementById("nextBtn");
-    const quotesSection = document.getElementById("quotesSection");
-    const slideshowSection = document.getElementById("slideshowSection");
-    const finalSection = document.getElementById("finalSection");
-    const slideImg = document.getElementById("slideImg");
-    const bgm = document.getElementById("bgm");
-
-    bgm.volume = 0.7;
-    const songs = [
-      "./music.mp3",
-      "./music/love1.mp3"
-    ];
-    if (!bgm.src || bgm.src === window.location.href) {
-      bgm.src = encodeURI(songs[Math.floor(Math.random() * songs.length)]);
-      bgm.load();
-    }
-
-    setTimeout(() => {
-      nextBtn.style.display = "inline-block";
-    }, 15000);
-
-    let i = 0;
+    // ===== Slideshow -> Final =====
+    let idx = 0;
     let shown = 1;
     let intervalId = null;
 
     function nextImage() {
-      i = (i + 1) % images.length;
+      idx = (idx + 1) % images.length;
       slideImg.style.opacity = 0;
+
       setTimeout(() => {
-        slideImg.src = encodeURI(images[i]);
-        slideImg.onload = () => slideImg.style.opacity = 1;
+        slideImg.src = encodeURI(images[idx]);
+        slideImg.onload = () => { slideImg.style.opacity = 1; };
       }, 250);
+
       shown++;
+
       if (shown >= images.length) {
         clearInterval(intervalId);
         setTimeout(showFinal, 1200);
@@ -198,6 +239,12 @@
     }
 
     function startSlideshow() {
+      // reset slideshow counters
+      idx = 0;
+      shown = 1;
+      slideImg.src = encodeURI(images[0]);
+      slideImg.style.opacity = 1;
+
       intervalId = setInterval(nextImage, 3000);
     }
 
@@ -207,9 +254,20 @@
       startFireworks();
     }
 
+    nextBtn.addEventListener("click", () => {
+      // keep music running
+      startMusic(true);
+
+      quotesSection.classList.add("hidden");
+      slideshowSection.classList.remove("hidden");
+      startSlideshow();
+    });
+
+    // ===== Fireworks =====
     function startFireworks() {
       const canvas = document.getElementById("fw");
       const ctx = canvas.getContext("2d");
+
       function resize() {
         const dpr = Math.max(1, window.devicePixelRatio || 1);
         canvas.width = Math.floor(window.innerWidth * dpr);
@@ -218,45 +276,76 @@
         canvas.style.height = "100%";
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
+
       resize();
       window.addEventListener("resize", resize);
+
       const W = () => window.innerWidth;
       const H = () => window.innerHeight;
+
       const particles = [];
       const rockets = [];
+
       function rand(min, max) { return Math.random() * (max - min) + min; }
+
       function launch() {
-        rockets.push({ x: rand(W() * 0.1, W() * 0.9), y: H() + 10, vx: rand(-1.2, 1.2), vy: rand(-10, -13), ttl: rand(45, 70) });
+        rockets.push({
+          x: rand(W() * 0.1, W() * 0.9),
+          y: H() + 10,
+          vx: rand(-1.2, 1.2),
+          vy: rand(-10, -13),
+          ttl: rand(45, 70)
+        });
       }
+
       function explode(x, y) {
         const count = Math.floor(rand(70, 120));
         for (let k = 0; k < count; k++) {
           const ang = rand(0, Math.PI * 2);
           const spd = rand(1.5, 7.5);
-          particles.push({ x, y, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, g: 0.12, life: rand(45, 85), size: rand(1, 2.6), hue: rand(0, 360) });
+          particles.push({
+            x, y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            g: 0.12,
+            life: rand(45, 85),
+            size: rand(1, 2.6),
+            hue: rand(0, 360)
+          });
         }
       }
+
       let frame = 0;
+
       function tick() {
         frame++;
         ctx.fillStyle = "rgba(0,0,0,0.18)";
         ctx.fillRect(0, 0, W(), H());
-        if (frame < 240) { if (frame % 10 === 0) launch(); } else { if (frame % 18 === 0) launch(); }
+
+        if (frame < 240) {
+          if (frame % 10 === 0) launch();
+        } else {
+          if (frame % 18 === 0) launch();
+        }
+
         for (let r = rockets.length - 1; r >= 0; r--) {
           const ro = rockets[r];
           ro.x += ro.vx;
           ro.y += ro.vy;
           ro.vy += 0.12;
           ro.ttl--;
+
           ctx.beginPath();
           ctx.arc(ro.x, ro.y, 2.2, 0, Math.PI * 2);
           ctx.fillStyle = "rgba(255,255,255,0.85)";
           ctx.fill();
+
           if (ro.ttl <= 0 || ro.vy >= -2) {
             explode(ro.x, ro.y);
             rockets.splice(r, 1);
           }
         }
+
         for (let p = particles.length - 1; p >= 0; p--) {
           const pa = particles[p];
           pa.x += pa.vx;
@@ -265,31 +354,22 @@
           pa.vx *= 0.985;
           pa.vy *= 0.985;
           pa.life--;
+
           ctx.beginPath();
           ctx.arc(pa.x, pa.y, pa.size, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(${pa.hue}, 95%, 60%, ${Math.max(0, pa.life / 85)})`;
           ctx.fill();
+
           if (pa.life <= 0) particles.splice(p, 1);
         }
+
         requestAnimationFrame(tick);
       }
+
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, W(), H());
       tick();
     }
-
-    async function startMusic() {
-      try { await bgm.play(); } catch (e) {}
-    }
-
-    nextBtn.addEventListener("click", async () => {
-      startMusic();
-      quotesSection.classList.add("hidden");
-      slideshowSection.classList.remove("hidden");
-      startSlideshow();
-      document.addEventListener("touchstart", () => startMusic(), { once: true });
-      document.addEventListener("click", () => startMusic(), { once: true });
-    });
   </script>
 </body>
 </html>

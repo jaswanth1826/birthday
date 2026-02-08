@@ -1,4 +1,4 @@
-const CORRECT_DOB = "2000-01-01"; // keep in YYYY-MM-DD
+const CORRECT_DOB = "2000-02-10"; // keep in YYYY-MM-DD
 
 function normalizeDOB(value) {
   // If empty
