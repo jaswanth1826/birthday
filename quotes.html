@@ -4,10 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Birthday Surprise 💕</title>
-  <link rel="stylesheet" href="style.css?v=2" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <link rel="stylesheet" href="style.css?v=3" />
   <style>
     .hidden { display: none !important; }
     #slideImg { transition: opacity 0.4s ease-in-out; }
@@ -15,7 +12,8 @@
 </head>
 
 <body class="quotes-page">
-  <!-- ✅ Use the file that you CONFIRMED exists on GitHub Pages: /music.mp3 (repo root) -->
+
+  <!-- ✅ Use ROOT music file (you confirmed this exists): /music.mp3 -->
   <audio id="bgm" preload="auto" playsinline loop>
     <source src="./music.mp3" type="audio/mpeg">
   </audio>
@@ -29,7 +27,7 @@
         <input id="dob" type="text" placeholder="DD-MM-YYYY (example: 10-02-2000)" />
         <button id="unlockBtn">Unlock</button>
       </div>
-      <div id="err" class="err">Oops — wrong DOB. Try again 🙂</div>
+      <div id="err" class="err" style="display:none;">Oops — wrong DOB. Try again 🙂</div>
       <div class="small">Tip: Use 10-02-2000, 10/02/2000, or YYYY-MM-DD.</div>
     </div>
   </section>
@@ -126,33 +124,34 @@
     const bgm = document.getElementById("bgm");
     bgm.volume = 0.9;
 
-    // ✅ Robust music start: reload + wait a moment + play
+    function waitForAudioReady(audio) {
+      return new Promise((resolve, reject) => {
+        if (audio.readyState >= 3) return resolve(); // HAVE_FUTURE_DATA
+        const ok = () => resolve();
+        const bad = () => reject(audio.error || new Error("audio error"));
+        audio.addEventListener("canplaythrough", ok, { once: true });
+        audio.addEventListener("canplay", ok, { once: true });
+        audio.addEventListener("error", bad, { once: true });
+        audio.load();
+      });
+    }
+
     async function startMusic(force = false) {
       try {
-        // If already playing and not forcing, exit
         if (!force && !bgm.paused) return;
-
-        // Reset
-        bgm.pause();
-        bgm.currentTime = 0;
-
-        // Make sure source is loaded
-        bgm.load();
-
-        // Try play
+        await waitForAudioReady(bgm);
         await bgm.play();
       } catch (e) {
-        console.log("Music play blocked/failed:", e);
+        console.log("Music failed:", e);
       }
     }
 
-    // If user already unlocked previously, show quotes (music will start on first tap)
+    // If already unlocked earlier: show quotes (music will start on first tap)
     if (localStorage.getItem("birthday_access") === "yes") {
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
       setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
 
-      // Optional: start music on first interaction
       document.addEventListener("touchstart", () => startMusic(true), { once: true });
       document.addEventListener("click", () => startMusic(true), { once: true });
     }
@@ -168,16 +167,14 @@
 
       localStorage.setItem("birthday_access", "yes");
 
-      // ✅ MUST be called directly inside this click for mobile autoplay
+      // ✅ MUST happen directly on this click for mobile autoplay
       startMusic(true);
 
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
 
       nextBtn.style.display = "none";
-      setTimeout(() => {
-        nextBtn.style.display = "inline-block";
-      }, 15000);
+      setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
     }
 
     unlockBtn.addEventListener("click", unlockAndShowQuotes);
@@ -185,38 +182,14 @@
       if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
     });
 
-    // Also allow a tap anywhere to start if browser blocked it
-    document.addEventListener("touchstart", () => startMusic(true), { once: true });
-    document.addEventListener("click", () => startMusic(true), { once: true });
-
     // ===== Photos =====
     const images = [
       "./photos/1.jpg",
       "./photos/2.jpg",
       "./photos/3.jpg",
       "./photos/4.jpg",
-      "./photos/5.jpg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (1).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (2).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (3).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM (4).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.25 PM.jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (1).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (2).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (3).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM (4).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.26 PM.jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM (1).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM (2).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM (3).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.27 PM.jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.28 PM (1).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.28 PM (2).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.28 PM.jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.29 PM (1).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.29 PM (2).jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.29 PM.jpeg",
-      "./photos/WhatsApp Image 2026-02-07 at 3.56.30 PM.jpeg"
+      "./photos/5.jpg"
+      // add more if needed
     ];
 
     // ===== Slideshow -> Final =====
@@ -234,7 +207,6 @@
       }, 250);
 
       shown++;
-
       if (shown >= images.length) {
         clearInterval(intervalId);
         setTimeout(showFinal, 1200);
@@ -246,7 +218,6 @@
       shown = 1;
       slideImg.src = encodeURI(images[0]);
       slideImg.style.opacity = 1;
-
       intervalId = setInterval(nextImage, 3000);
     }
 
@@ -257,8 +228,7 @@
     }
 
     nextBtn.addEventListener("click", () => {
-      startMusic(true); // keep music alive
-
+      startMusic(true);
       quotesSection.classList.add("hidden");
       slideshowSection.classList.remove("hidden");
       startSlideshow();
@@ -290,77 +260,40 @@
       function rand(min, max) { return Math.random() * (max - min) + min; }
 
       function launch() {
-        rockets.push({
-          x: rand(W() * 0.1, W() * 0.9),
-          y: H() + 10,
-          vx: rand(-1.2, 1.2),
-          vy: rand(-10, -13),
-          ttl: rand(45, 70)
-        });
+        rockets.push({ x: rand(W()*0.1, W()*0.9), y: H()+10, vx: rand(-1.2, 1.2), vy: rand(-10, -13), ttl: rand(45, 70) });
       }
 
       function explode(x, y) {
         const count = Math.floor(rand(70, 120));
-        for (let k = 0; k < count; k++) {
-          const ang = rand(0, Math.PI * 2);
+        for (let k=0;k<count;k++) {
+          const ang = rand(0, Math.PI*2);
           const spd = rand(1.5, 7.5);
-          particles.push({
-            x, y,
-            vx: Math.cos(ang) * spd,
-            vy: Math.sin(ang) * spd,
-            g: 0.12,
-            life: rand(45, 85),
-            size: rand(1, 2.6),
-            hue: rand(0, 360)
-          });
+          particles.push({ x, y, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, g: 0.12, life: rand(45, 85), size: rand(1, 2.6), hue: rand(0, 360) });
         }
       }
 
       let frame = 0;
-
       function tick() {
         frame++;
         ctx.fillStyle = "rgba(0,0,0,0.18)";
         ctx.fillRect(0, 0, W(), H());
 
-        if (frame < 240) {
-          if (frame % 10 === 0) launch();
-        } else {
-          if (frame % 18 === 0) launch();
-        }
+        if (frame % 12 === 0) launch();
 
-        for (let r = rockets.length - 1; r >= 0; r--) {
+        for (let r=rockets.length-1;r>=0;r--) {
           const ro = rockets[r];
-          ro.x += ro.vx;
-          ro.y += ro.vy;
-          ro.vy += 0.12;
-          ro.ttl--;
-
-          ctx.beginPath();
-          ctx.arc(ro.x, ro.y, 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(255,255,255,0.85)";
-          ctx.fill();
-
-          if (ro.ttl <= 0 || ro.vy >= -2) {
-            explode(ro.x, ro.y);
-            rockets.splice(r, 1);
-          }
+          ro.x += ro.vx; ro.y += ro.vy; ro.vy += 0.12; ro.ttl--;
+          ctx.beginPath(); ctx.arc(ro.x, ro.y, 2.2, 0, Math.PI*2);
+          ctx.fillStyle = "rgba(255,255,255,0.85)"; ctx.fill();
+          if (ro.ttl <= 0 || ro.vy >= -2) { explode(ro.x, ro.y); rockets.splice(r, 1); }
         }
 
-        for (let p = particles.length - 1; p >= 0; p--) {
+        for (let p=particles.length-1;p>=0;p--) {
           const pa = particles[p];
-          pa.x += pa.vx;
-          pa.y += pa.vy;
-          pa.vy += pa.g;
-          pa.vx *= 0.985;
-          pa.vy *= 0.985;
-          pa.life--;
-
-          ctx.beginPath();
-          ctx.arc(pa.x, pa.y, pa.size, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(${pa.hue}, 95%, 60%, ${Math.max(0, pa.life / 85)})`;
-          ctx.fill();
-
+          pa.x += pa.vx; pa.y += pa.vy; pa.vy += pa.g;
+          pa.vx *= 0.985; pa.vy *= 0.985; pa.life--;
+          ctx.beginPath(); ctx.arc(pa.x, pa.y, pa.size, 0, Math.PI*2);
+          ctx.fillStyle = `hsla(${pa.hue},95%,60%,${Math.max(0, pa.life/85)})`; ctx.fill();
           if (pa.life <= 0) particles.splice(p, 1);
         }
 
