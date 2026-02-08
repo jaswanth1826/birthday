@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Birthday Surprise 💕</title>
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=5" />
   <style>
     .hidden { display: none !important; }
     #slideImg { transition: opacity 0.4s ease-in-out; }
@@ -13,9 +13,9 @@
 
 <body class="quotes-page">
 
-  <!-- ✅ Use ROOT music file (you confirmed this exists): /music.mp3 -->
+  <!-- ✅ Absolute URL + correct MIME type (works for Safari/Chrome) -->
   <audio id="bgm" preload="auto" playsinline loop>
-    <source src="./music.mp3" type="audio/mpeg">
+    <source src="https://jaswanth1826.github.io/birthday/music.mp3" type="audio/mpeg">
   </audio>
 
   <!-- ====== SECTION 0: DOB FORM ====== -->
@@ -62,11 +62,6 @@
       <p class="quote sub-quote">Every moment with you is magical</p>
       <p class="quote sub-quote">So grateful for you</p>
       <p class="quote sub-quote">Happy Birthday, my love ✨</p>
-      <p class="quote sub-quote">You make every day brighter</p>
-      <p class="quote sub-quote">Forever thankful for you</p>
-      <p class="quote sub-quote">My heart belongs to you</p>
-      <p class="quote sub-quote">Wishing you endless joy today and always</p>
-      <p class="quote sub-quote">You are my favorite blessing</p>
 
       <button id="nextBtn" class="next-btn" style="display:none;">
         Inka entha sepu chusthav? Next page ki vellava 😌👉
@@ -124,35 +119,48 @@
     const bgm = document.getElementById("bgm");
     bgm.volume = 0.9;
 
-    function waitForAudioReady(audio) {
-      return new Promise((resolve, reject) => {
-        if (audio.readyState >= 3) return resolve(); // HAVE_FUTURE_DATA
-        const ok = () => resolve();
-        const bad = () => reject(audio.error || new Error("audio error"));
-        audio.addEventListener("canplaythrough", ok, { once: true });
-        audio.addEventListener("canplay", ok, { once: true });
-        audio.addEventListener("error", bad, { once: true });
-        audio.load();
-      });
+    // ===== iOS/Safari audio unlock helper =====
+    let audioCtx = null;
+    function unlockIOSAudio() {
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        if (!audioCtx) audioCtx = new AC();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+
+        // tiny silent buffer (classic iOS unlock)
+        const buffer = audioCtx.createBuffer(1, 1, 22050);
+        const src = audioCtx.createBufferSource();
+        src.buffer = buffer;
+        src.connect(audioCtx.destination);
+        src.start(0);
+      } catch (e) {}
     }
 
+    // ===== Safari/Chrome compatible play =====
     async function startMusic(force = false) {
       try {
         if (!force && !bgm.paused) return;
-        await waitForAudioReady(bgm);
-        await bgm.play();
+
+        unlockIOSAudio();
+
+        bgm.muted = false;
+        bgm.load(); // helps Safari
+
+        const p = bgm.play();
+        if (p && typeof p.then === "function") await p;
       } catch (e) {
-        console.log("Music failed:", e);
+        console.log("Music blocked by browser policy:", e);
       }
     }
 
-    // If already unlocked earlier: show quotes (music will start on first tap)
+    // If already unlocked earlier: show quotes (music starts on first tap)
     if (localStorage.getItem("birthday_access") === "yes") {
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
       setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
 
-      document.addEventListener("touchstart", () => startMusic(true), { once: true });
+      document.addEventListener("touchstart", () => startMusic(true), { once: true, passive: true });
       document.addEventListener("click", () => startMusic(true), { once: true });
     }
 
@@ -167,7 +175,7 @@
 
       localStorage.setItem("birthday_access", "yes");
 
-      // ✅ MUST happen directly on this click for mobile autoplay
+      // ✅ This click is the "user gesture" Safari requires
       startMusic(true);
 
       dobSection.classList.add("hidden");
@@ -182,6 +190,10 @@
       if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
     });
 
+    // fallback: any first interaction
+    document.addEventListener("touchstart", () => startMusic(true), { once: true, passive: true });
+    document.addEventListener("click", () => startMusic(true), { once: true });
+
     // ===== Photos =====
     const images = [
       "./photos/1.jpg",
@@ -189,7 +201,6 @@
       "./photos/3.jpg",
       "./photos/4.jpg",
       "./photos/5.jpg"
-      // add more if needed
     ];
 
     // ===== Slideshow -> Final =====
@@ -234,7 +245,7 @@
       startSlideshow();
     });
 
-    // ===== Fireworks =====
+    // ===== Fireworks (same as yours; kept simple) =====
     function startFireworks() {
       const canvas = document.getElementById("fw");
       const ctx = canvas.getContext("2d");
@@ -247,22 +258,18 @@
         canvas.style.height = "100%";
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
-
       resize();
       window.addEventListener("resize", resize);
 
       const W = () => window.innerWidth;
       const H = () => window.innerHeight;
-
       const particles = [];
       const rockets = [];
-
-      function rand(min, max) { return Math.random() * (max - min) + min; }
+      const rand = (min, max) => Math.random() * (max - min) + min;
 
       function launch() {
         rockets.push({ x: rand(W()*0.1, W()*0.9), y: H()+10, vx: rand(-1.2, 1.2), vy: rand(-10, -13), ttl: rand(45, 70) });
       }
-
       function explode(x, y) {
         const count = Math.floor(rand(70, 120));
         for (let k=0;k<count;k++) {
@@ -296,7 +303,6 @@
           ctx.fillStyle = `hsla(${pa.hue},95%,60%,${Math.max(0, pa.life/85)})`; ctx.fill();
           if (pa.life <= 0) particles.splice(p, 1);
         }
-
         requestAnimationFrame(tick);
       }
 
