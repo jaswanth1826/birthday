@@ -4,199 +4,150 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Birthday Surprise 💕</title>
-  <link rel="stylesheet" href="style.css?v=6" />
+
+  <link rel="stylesheet" href="style.css?v=10" />
+
   <style>
     .hidden { display: none !important; }
-    #slideImg { transition: opacity 0.4s ease-in-out; }
+    #slideImg { transition: opacity 0.6s ease-in-out; }
   </style>
 </head>
 
 <body class="quotes-page">
 
-  <!-- ✅ Use ONE file only: put music.mp3 in repo root (same folder as index.html) -->
+  <!-- ✅ MUSIC FILE PATH FIXED -->
+  <!-- File must be here: music/music.mp3 -->
   <audio id="bgm" preload="auto" playsinline loop>
-    <source src="./music.mp3" type="audio/mpeg">
+    <source src="./music/music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- ====== SECTION 0: DOB FORM ====== -->
+  <!-- ================= SECTION 0: DOB ================= -->
   <section id="dobSection" class="wrap">
     <div class="card">
       <h1>Unlock Your Birthday Surprise 🎁</h1>
       <p>Enter your Date of Birth to continue</p>
+
       <div class="inputRow">
         <input id="dob" type="text" placeholder="DD-MM-YYYY (example: 10-02-2000)" />
         <button id="unlockBtn">Unlock</button>
       </div>
-      <div id="err" class="err" style="display:none;">Oops — wrong DOB. Try again 🙂</div>
-      <div class="small">Tip: Use 10-02-2000, 10/02/2000, or YYYY-MM-DD.</div>
-    </div>
-  </section>
 
-  <!-- ====== SECTION 1: QUOTES ====== -->
-  <section id="quotesSection" class="hidden">
-    <div class="sky">
-      <div class="sun"></div>
-      <div class="cloud cloud-1"></div>
-      <div class="cloud cloud-2"></div>
-      <div class="cloud cloud-3"></div>
+      <div id="err" class="err" style="display:none;">
+        Oops — wrong DOB. Try again 🙂
+      </div>
 
-      <div class="bird bird-1">🐦</div>
-      <div class="bird bird-2">🕊️</div>
-      <div class="bird bird-3">🐦</div>
-      <div class="bird bird-4">🕊️</div>
-      <div class="bird bird-5">🐦</div>
-
-      <div class="flower flower-1">🌸</div>
-      <div class="flower flower-2">🌺</div>
-      <div class="flower flower-3">🌷</div>
-      <div class="flower flower-4">🌼</div>
-      <div class="flower flower-5">🌸</div>
-      <div class="flower flower-6">🌺</div>
-      <div class="flower flower-7">🌷</div>
-      <div class="flower flower-8">🌼</div>
-    </div>
-
-    <div class="quotes-container">
-      <h1 class="quote main-quote">Hi Chaturya 💕</h1>
-      <p class="quote sub-quote">You light up my world</p>
-      <p class="quote sub-quote">Every moment with you is magical</p>
-      <p class="quote sub-quote">So grateful for you</p>
-      <p class="quote sub-quote">Happy Birthday, my love ✨</p>
-      <p class="quote sub-quote">You make every day brighter</p>
-      <p class="quote sub-quote">Forever thankful for you</p>
-      <p class="quote sub-quote">My heart belongs to you</p>
-      <p class="quote sub-quote">Wishing you endless joy today and always</p>
-      <p class="quote sub-quote">You are my favorite blessing</p>
-
-      <button id="nextBtn" class="next-btn" style="display:none;">
-        Inka entha sepu chusthav? Next page ki vellava 😌👉
-      </button>
-    </div>
-  </section>
-
-  <!-- ====== SECTION 2: SLIDESHOW ====== -->
-  <section id="slideshowSection" class="hidden">
-    <div class="wrap slideshow-wrap">
-      <div class="card">
-        <h1>💕</h1>
-        <div class="slideshowFrame">
-          <img id="slideImg" class="photo" src="./photos/1.jpg" alt="memory" />
-        </div>
-        <p class="small">💞</p>
+      <div class="small">
+        Tip: Use 10-02-2000 or YYYY-MM-DD.
       </div>
     </div>
   </section>
 
-  <!-- ====== SECTION 3: FINAL FIREWORKS ====== -->
-  <section id="finalSection" class="hidden final-page">
-    <canvas id="fw"></canvas>
-    <div class="finalText">
-      <div class="hb">HAPPY BIRTHDAY 🎂</div>
-      <div class="name">Chaturya 💕</div>
-      <div class="wish">May your life be full of love, laughter & magic ✨</div>
+  <!-- ================= SECTION 1: QUOTES ================= -->
+  <section id="quotesSection" class="hidden">
+
+    <div class="quotes-container">
+      <h1 class="quote main-quote">Hi Bangaram 💕</h1>
+      <p class="quote sub-quote">You light up my world ✨</p>
+      <p class="quote sub-quote">Every moment with you is magical</p>
+      <p class="quote sub-quote">Happy Birthday, my love 🎂</p>
+      <p class="quote sub-quote">Forever thankful for you ❤️</p>
+
+      <!-- Next button appears after 15 seconds -->
+      <button id="nextBtn" style="display:none;" class="next-btn">
+        Inka entha sepu chusthav? Next page ki vellava 😌👉
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ================= SECTION 2: SLIDESHOW ================= -->
+  <section id="slideshowSection" class="hidden">
+    <div class="wrap slideshow-wrap">
+      <div class="card">
+        <h1>Our Memories 💞</h1>
+
+        <div class="slideshowFrame">
+          <img id="slideImg" src="./photos/1.jpg" class="photo" />
+        </div>
+
+        <p class="small">Love you forever 💕</p>
+      </div>
     </div>
   </section>
 
+  <!-- ================= SECTION 3: FINAL FIREWORKS ================= -->
+  <section id="finalSection" class="hidden final-page">
+    <canvas id="fw"></canvas>
+
+    <div class="finalText">
+      <h1>🎆 HAPPY BIRTHDAY 🎆</h1>
+      <h2>Bangaram 💕</h2>
+      <p>May your life always sparkle with joy ✨</p>
+    </div>
+  </section>
+
+  <!-- ================= SCRIPT ================= -->
   <script>
-    // ===== DOB =====
     const CORRECT_DOB = "2000-02-10";
+
     function normalizeDOB(value) {
       if (!value) return "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
       const m = value.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);
       if (m) return `${m[3]}-${m[2]}-${m[1]}`;
       return value;
     }
 
-    // ===== Elements =====
+    // Elements
     const dobSection = document.getElementById("dobSection");
     const quotesSection = document.getElementById("quotesSection");
     const slideshowSection = document.getElementById("slideshowSection");
     const finalSection = document.getElementById("finalSection");
 
     const dobInput = document.getElementById("dob");
-    const errEl = document.getElementById("err");
     const unlockBtn = document.getElementById("unlockBtn");
+    const errEl = document.getElementById("err");
 
     const nextBtn = document.getElementById("nextBtn");
     const slideImg = document.getElementById("slideImg");
 
+    // Music
     const bgm = document.getElementById("bgm");
-    bgm.volume = 0.9;
+    bgm.volume = 0.8;
 
-    // ===== iOS/Safari unlock (helps a lot) =====
-    let audioCtx = null;
-    function unlockIOSAudio() {
-      try {
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC) return;
-        if (!audioCtx) audioCtx = new AC();
-        if (audioCtx.state === "suspended") audioCtx.resume();
-
-        // tiny silent buffer
-        const buffer = audioCtx.createBuffer(1, 1, 22050);
-        const src = audioCtx.createBufferSource();
-        src.buffer = buffer;
-        src.connect(audioCtx.destination);
-        src.start(0);
-      } catch (e) {}
+    // ✅ Safari + Chrome working play
+    function startMusic() {
+      bgm.play().catch(() => {
+        console.log("Autoplay blocked until user gesture");
+      });
     }
 
-    // ===== Most compatible play =====
-    async function startMusic() {
-      try {
-        unlockIOSAudio();
-        bgm.muted = false;
-        bgm.load();           // Safari likes load() before play()
-        await bgm.play();     // Must be called from user click
-      } catch (e) {
-        // If it still fails, the audio file is not supported or is corrupted
-        console.log("Audio play failed:", e);
-      }
-    }
-
-    // If already unlocked earlier: show quotes (music will start on first tap)
-    if (localStorage.getItem("birthday_access") === "yes") {
-      dobSection.classList.add("hidden");
-      quotesSection.classList.remove("hidden");
-      setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
-
-      // first tap anywhere starts audio
-      document.addEventListener("touchstart", () => startMusic(), { once: true, passive: true });
-      document.addEventListener("click", () => startMusic(), { once: true });
-    }
-
+    // Unlock DOB
     function unlockAndShowQuotes() {
       errEl.style.display = "none";
 
       const userDOB = normalizeDOB(dobInput.value.trim());
+
       if (userDOB !== CORRECT_DOB) {
         errEl.style.display = "block";
         return;
       }
 
-      localStorage.setItem("birthday_access", "yes");
-
-      // ✅ MUST be direct click => works on Safari/Chrome mobile
+      // Start music ON CLICK (mobile requirement)
       startMusic();
 
+      // Show quotes
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
 
-      nextBtn.style.display = "none";
-      setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
+      // Next button after 15 sec
+      setTimeout(() => {
+        nextBtn.style.display = "inline-block";
+      }, 15000);
     }
 
     unlockBtn.addEventListener("click", unlockAndShowQuotes);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
-    });
 
-    // Safety fallback: any first interaction
-    document.addEventListener("touchstart", () => startMusic(), { once: true, passive: true });
-    document.addEventListener("click", () => startMusic(), { once: true });
-
-    // ===== Photos =====
+    // ================= SLIDESHOW =================
     const images = [
       "./photos/1.jpg",
       "./photos/2.jpg",
@@ -205,114 +156,91 @@
       "./photos/5.jpg"
     ];
 
-    // ===== Slideshow -> Final =====
     let idx = 0;
-    let shown = 1;
-    let intervalId = null;
-
-    function nextImage() {
-      idx = (idx + 1) % images.length;
-      slideImg.style.opacity = 0;
-
-      setTimeout(() => {
-        slideImg.src = encodeURI(images[idx]);
-        slideImg.onload = () => { slideImg.style.opacity = 1; };
-      }, 250);
-
-      shown++;
-      if (shown >= images.length) {
-        clearInterval(intervalId);
-        setTimeout(showFinal, 1200);
-      }
-    }
 
     function startSlideshow() {
       idx = 0;
-      shown = 1;
-      slideImg.src = encodeURI(images[0]);
-      slideImg.style.opacity = 1;
-      intervalId = setInterval(nextImage, 3000);
+
+      const interval = setInterval(() => {
+        idx++;
+
+        if (idx >= images.length) {
+          clearInterval(interval);
+          showFinal();
+          return;
+        }
+
+        slideImg.style.opacity = 0;
+
+        setTimeout(() => {
+          slideImg.src = images[idx];
+          slideImg.style.opacity = 1;
+        }, 400);
+
+      }, 3000);
     }
 
+    // Next button click
+    nextBtn.addEventListener("click", () => {
+      quotesSection.classList.add("hidden");
+      slideshowSection.classList.remove("hidden");
+      startSlideshow();
+    });
+
+    // ================= FINAL =================
     function showFinal() {
       slideshowSection.classList.add("hidden");
       finalSection.classList.remove("hidden");
       startFireworks();
     }
 
-    nextBtn.addEventListener("click", () => {
-      startMusic(); // keep music alive
-      quotesSection.classList.add("hidden");
-      slideshowSection.classList.remove("hidden");
-      startSlideshow();
-    });
-
-    // ===== Fireworks =====
+    // Fireworks animation
     function startFireworks() {
       const canvas = document.getElementById("fw");
       const ctx = canvas.getContext("2d");
 
-      function resize() {
-        const dpr = Math.max(1, window.devicePixelRatio || 1);
-        canvas.width = Math.floor(window.innerWidth * dpr);
-        canvas.height = Math.floor(window.innerHeight * dpr);
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
-
-      resize();
-      window.addEventListener("resize", resize);
-
-      const W = () => window.innerWidth;
-      const H = () => window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
       const particles = [];
-      const rockets = [];
-      const rand = (min, max) => Math.random() * (max - min) + min;
 
-      function launch() {
-        rockets.push({ x: rand(W()*0.1, W()*0.9), y: H()+10, vx: rand(-1.2, 1.2), vy: rand(-10, -13), ttl: rand(45, 70) });
-      }
-      function explode(x, y) {
-        const count = Math.floor(rand(70, 120));
-        for (let k=0;k<count;k++) {
-          const ang = rand(0, Math.PI*2);
-          const spd = rand(1.5, 7.5);
-          particles.push({ x, y, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, g: 0.12, life: rand(45, 85), size: rand(1, 2.6), hue: rand(0, 360) });
+      function createFirework() {
+        for (let i = 0; i < 100; i++) {
+          particles.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 0.5) * 8,
+            life: 100
+          });
         }
       }
 
-      let frame = 0;
-      function tick() {
-        frame++;
-        ctx.fillStyle = "rgba(0,0,0,0.18)";
-        ctx.fillRect(0, 0, W(), H());
-        if (frame % 12 === 0) launch();
+      function animate() {
+        ctx.fillStyle = "rgba(0,0,0,0.2)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        for (let r=rockets.length-1;r>=0;r--) {
-          const ro = rockets[r];
-          ro.x += ro.vx; ro.y += ro.vy; ro.vy += 0.12; ro.ttl--;
-          ctx.beginPath(); ctx.arc(ro.x, ro.y, 2.2, 0, Math.PI*2);
-          ctx.fillStyle = "rgba(255,255,255,0.85)"; ctx.fill();
-          if (ro.ttl <= 0 || ro.vy >= -2) { explode(ro.x, ro.y); rockets.splice(r, 1); }
-        }
+        particles.forEach((p, index) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
 
-        for (let p=particles.length-1;p>=0;p--) {
-          const pa = particles[p];
-          pa.x += pa.vx; pa.y += pa.vy; pa.vy += pa.g;
-          pa.vx *= 0.985; pa.vy *= 0.985; pa.life--;
-          ctx.beginPath(); ctx.arc(pa.x, pa.y, pa.size, 0, Math.PI*2);
-          ctx.fillStyle = `hsla(${pa.hue},95%,60%,${Math.max(0, pa.life/85)})`; ctx.fill();
-          if (pa.life <= 0) particles.splice(p, 1);
-        }
-        requestAnimationFrame(tick);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = "gold";
+          ctx.fill();
+
+          if (p.life <= 0) particles.splice(index, 1);
+        });
+
+        requestAnimationFrame(animate);
       }
 
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, W(), H());
-      tick();
+      createFirework();
+      animate();
+      setInterval(createFirework, 2000);
     }
   </script>
+
 </body>
 </html>
