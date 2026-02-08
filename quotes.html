@@ -12,10 +12,7 @@
       font-family: "Poppins", sans-serif;
       overflow: hidden;
     }
-
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     /* ================= DREAM BACKGROUND ================= */
     .dream-bg {
@@ -37,10 +34,40 @@
       border-radius: 50%;
       animation: pulse 4s infinite alternate;
     }
-
     @keyframes pulse {
       from { transform: scale(1); opacity: 0.8; }
       to   { transform: scale(1.2); opacity: 1; }
+    }
+
+    /* Moving Clouds */
+    .cloud {
+      position: absolute;
+      top: 12%;
+      width: 220px;
+      height: 70px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 999px;
+      filter: blur(0.2px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+      animation: cloudMove linear infinite;
+    }
+    .cloud::before,
+    .cloud::after {
+      content: "";
+      position: absolute;
+      background: rgba(255,255,255,0.22);
+      border-radius: 999px;
+    }
+    .cloud::before { width: 90px; height: 90px; left: 28px; top: -45px; }
+    .cloud::after  { width: 115px; height: 115px; left: 92px; top: -60px; }
+
+    .c1 { top: 12%; left: -30%; opacity: 0.75; animation-duration: 32s; }
+    .c2 { top: 22%; left: -45%; opacity: 0.55; transform: scale(1.25); animation-duration: 44s; }
+    .c3 { top: 32%; left: -55%; opacity: 0.45; transform: scale(0.95); animation-duration: 52s; }
+
+    @keyframes cloudMove {
+      from { transform: translateX(0) scale(var(--s, 1)); }
+      to   { transform: translateX(160vw) scale(var(--s, 1)); }
     }
 
     /* Mountains */
@@ -50,26 +77,9 @@
       width: 130%;
       border-radius: 50%;
     }
-
-    .m1 {
-      height: 50%;
-      left: -15%;
-      background: #0b132b;
-    }
-
-    .m2 {
-      height: 60%;
-      left: -25%;
-      background: #1c2541;
-      opacity: 0.9;
-    }
-
-    .m3 {
-      height: 40%;
-      left: -10%;
-      background: #3a506b;
-      opacity: 0.7;
-    }
+    .m1 { height: 50%; left: -15%; background: #0b132b; }
+    .m2 { height: 60%; left: -25%; background: #1c2541; opacity: 0.9; }
+    .m3 { height: 40%; left: -10%; background: #3a506b; opacity: 0.7; }
 
     /* Birds Flying */
     .bird {
@@ -78,7 +88,6 @@
       opacity: 0.8;
       animation: fly 10s linear infinite;
     }
-
     .b1 { top: 20%; left: -10%; animation-delay: 0s; }
     .b2 { top: 30%; left: -15%; animation-delay: 3s; }
     .b3 { top: 15%; left: -20%; animation-delay: 6s; }
@@ -88,12 +97,34 @@
       to   { transform: translateX(130vw); }
     }
 
+    /* Floating Hearts */
+    .hearts {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      bottom: -10%;
+      opacity: 0.55;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+    }
+    @keyframes floatUp {
+      from { transform: translateY(0) translateX(0) scale(0.9); opacity: 0; }
+      15%  { opacity: 0.55; }
+      to   { transform: translateY(-120vh) translateX(40px) scale(1.15); opacity: 0; }
+    }
+
     /* ================= CARD ================= */
     .wrap {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 16px;
     }
 
     .card {
@@ -105,16 +136,17 @@
       color: white;
       box-shadow: 0 0 25px rgba(0,0,0,0.3);
       width: 90%;
-      max-width: 420px;
+      max-width: 520px;
     }
 
     input {
       padding: 12px;
-      width: 70%;
+      width: min(320px, 82vw);
       border-radius: 12px;
       border: none;
       outline: none;
       margin-top: 10px;
+      font-size: 1rem;
     }
 
     button {
@@ -128,43 +160,47 @@
       color: white;
       transition: 0.3s;
     }
-
-    button:hover {
-      background: rgba(255,255,255,0.5);
-    }
+    button:hover { background: rgba(255,255,255,0.5); }
 
     /* ================= QUOTES ================= */
     .quotes-container {
       text-align: center;
-      padding-top: 100px;
+      padding-top: 90px;
       color: white;
       text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+      padding-left: 14px;
+      padding-right: 14px;
     }
-
-    .main-quote {
-      font-size: 2.5rem;
-      font-weight: bold;
-    }
-
-    .sub-quote {
-      font-size: 1.4rem;
-      margin: 15px 0;
-    }
+    .main-quote { font-size: 2.5rem; font-weight: bold; }
+    .sub-quote { font-size: 1.35rem; margin: 14px 0; }
 
     .next-btn {
-      margin-top: 40px;
+      margin-top: 34px;
       padding: 15px 25px;
       border-radius: 25px;
-      font-size: 1.2rem;
+      font-size: 1.08rem;
       backdrop-filter: blur(10px);
     }
 
     /* ================= SLIDESHOW ================= */
+    .slideshowFrame {
+      margin-top: 12px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.15);
+    }
     .slideshowFrame img {
       width: 100%;
+      height: auto;
+      display: block;
       border-radius: 20px;
-      transition: opacity 0.6s ease-in-out;
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 0.7s ease-in-out, transform 3s ease-in-out;
     }
+    .zoomIn { transform: scale(1.08); }
 
     /* ================= FINAL PAGE ================= */
     .final-page {
@@ -172,20 +208,17 @@
       height: 100vh;
       width: 100%;
     }
-
-    canvas {
-      position: absolute;
-      inset: 0;
-    }
+    canvas { position: absolute; inset: 0; }
 
     .finalText {
       position: absolute;
-      top: 35%;
+      top: 18%;
       width: 100%;
       text-align: center;
       color: white;
       font-size: 2rem;
-      text-shadow: 0 0 15px black;
+      text-shadow: 0 0 18px rgba(0,0,0,0.9);
+      padding: 0 14px;
     }
   </style>
 </head>
@@ -195,13 +228,22 @@
   <!-- 🌄 Background -->
   <div class="dream-bg">
     <div class="sun"></div>
+
+    <div class="cloud c1" style="--s:1;"></div>
+    <div class="cloud c2" style="--s:1.25;"></div>
+    <div class="cloud c3" style="--s:0.95;"></div>
+
     <div class="bird b1">🕊️</div>
     <div class="bird b2">🕊️</div>
     <div class="bird b3">🕊️</div>
+
     <div class="mountain m1"></div>
     <div class="mountain m2"></div>
     <div class="mountain m3"></div>
   </div>
+
+  <!-- 💖 Floating hearts layer -->
+  <div class="hearts" id="hearts"></div>
 
   <!-- 🎵 Music -->
   <audio id="bgm" preload="auto" playsinline loop>
@@ -239,9 +281,9 @@
   <!-- ===== SECTION 2: SLIDESHOW ===== -->
   <section id="slideshowSection" class="hidden wrap">
     <div class="card">
-      <h1> 💞</h1>
+      <h1>💞</h1>
       <div class="slideshowFrame">
-        <img id="slideImg" src="./photos/1.jpg">
+        <img id="slideImg" src="./photos/1.jpeg" alt="memory">
       </div>
     </div>
   </section>
@@ -273,6 +315,24 @@
     const nextBtn = document.getElementById("nextBtn");
     const slideImg = document.getElementById("slideImg");
 
+    // Floating hearts generator
+    function spawnHearts() {
+      const wrap = document.getElementById("hearts");
+      wrap.innerHTML = "";
+      const count = 18;
+      for (let i = 0; i < count; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = Math.random() > 0.5 ? "💗" : "💖";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.fontSize = (18 + Math.random() * 18) + "px";
+        h.style.animationDuration = (10 + Math.random() * 10) + "s";
+        h.style.animationDelay = (Math.random() * 8) + "s";
+        wrap.appendChild(h);
+      }
+    }
+    spawnHearts();
+
     function startMusic() {
       bgm.volume = 0.8;
       bgm.play().catch(() => console.log("Safari blocked autoplay"));
@@ -294,23 +354,45 @@
       }, 15000);
     });
 
-    const images = ["1.jpeg","2.jpeg","3.jpeg","4.jpeg","5.jpeg", "6.jpeg", "7.jpeg", "8.jpeg", "9.jpeg", "10.jpeg", "11.jpeg", "12.jpeg", "13.jpeg", "14.jpeg", "15.jpeg", "16.jpeg", "17.jpeg", "18.jpeg", "19.jpeg", "20.jpeg", "21.jpeg"];
+    // ✅ 1.jpeg to 21.jpeg
+    const images = Array.from({ length: 21 }, (_, i) => `./photos/${i + 1}.jpeg`);
+
     let idx = 0;
+    let slideTimer = null;
+
+    function showSlide(i) {
+      slideImg.classList.remove("zoomIn");
+      slideImg.style.opacity = 0;
+
+      setTimeout(() => {
+        slideImg.src = images[i];
+        slideImg.onload = () => {
+          slideImg.style.opacity = 1;
+          setTimeout(() => slideImg.classList.add("zoomIn"), 50);
+        };
+      }, 300);
+    }
 
     nextBtn.addEventListener("click", () => {
       quotesSection.classList.add("hidden");
       slideshowSection.classList.remove("hidden");
 
-      setInterval(() => {
+      idx = 0;
+      showSlide(idx);
+
+      if (slideTimer) clearInterval(slideTimer);
+
+      slideTimer = setInterval(() => {
         idx++;
         if (idx >= images.length) {
+          clearInterval(slideTimer);
           slideshowSection.classList.add("hidden");
           finalSection.classList.remove("hidden");
           startFireworks();
           return;
         }
-        slideImg.src = "./photos/" + images[idx];
-      }, 2500);
+        showSlide(idx);
+      }, 2800);
     });
 
     function startFireworks() {
@@ -322,32 +404,37 @@
       let particles = [];
 
       function boom() {
-        for (let i = 0; i < 120; i++) {
+        for (let i = 0; i < 140; i++) {
+          const ang = Math.random() * Math.PI * 2;
+          const spd = 2 + Math.random() * 8;
           particles.push({
-            x: canvas.width/2,
-            y: canvas.height/2,
-            vx: (Math.random()-0.5)*10,
-            vy: (Math.random()-0.5)*10,
-            life: 100
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            life: 110,
+            hue: Math.random() * 360
           });
         }
       }
 
       function animate() {
-        ctx.fillStyle="rgba(0,0,0,0.2)";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "rgba(0,0,0,0.18)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        particles.forEach((p,i)=>{
-          p.x+=p.vx;
-          p.y+=p.vy;
+        particles.forEach((p, i) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.985;
+          p.vy *= 0.985;
           p.life--;
 
           ctx.beginPath();
-          ctx.arc(p.x,p.y,2,0,Math.PI*2);
-          ctx.fillStyle="gold";
+          ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue},95%,60%,${Math.max(0, p.life / 110)})`;
           ctx.fill();
 
-          if(p.life<=0) particles.splice(i,1);
+          if (p.life <= 0) particles.splice(i, 1);
         });
 
         requestAnimationFrame(animate);
@@ -355,9 +442,8 @@
 
       boom();
       animate();
-      setInterval(boom,2000);
+      setInterval(boom, 2000);
     }
   </script>
-
 </body>
 </html>
