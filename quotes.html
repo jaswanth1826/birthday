@@ -15,8 +15,10 @@
 </head>
 
 <body class="quotes-page">
-  <!-- Single audio element for the whole one-page experience -->
-  <audio id="bgm" preload="auto" playsinline loop></audio>
+  <!-- ✅ Music file is inside /music folder: /music/music.m4a -->
+  <audio id="bgm" preload="auto" playsinline loop>
+    <source src="./music/music.m4a" type="audio/mp4">
+  </audio>
 
   <!-- ====== SECTION 0: DOB FORM ====== -->
   <section id="dobSection" class="wrap">
@@ -24,7 +26,7 @@
       <h1>Unlock Your Birthday Surprise 🎁</h1>
       <p>Enter your Date of Birth to continue</p>
       <div class="inputRow">
-        <input id="dob" type="text" placeholder="DD-MM-YYYY (example: 01-01-2000)" />
+        <input id="dob" type="text" placeholder="DD-MM-YYYY (example: 10-02-2000)" />
         <button id="unlockBtn">Unlock</button>
       </div>
       <div id="err" class="err">Oops — wrong DOB. Try again 🙂</div>
@@ -100,6 +102,7 @@
   <script>
     // ===== DOB =====
     const CORRECT_DOB = "2000-02-10";
+
     function normalizeDOB(value) {
       if (!value) return "";
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
@@ -108,7 +111,7 @@
       return value;
     }
 
-    // ===== Sections / Elements =====
+    // ===== Elements =====
     const dobSection = document.getElementById("dobSection");
     const quotesSection = document.getElementById("quotesSection");
     const slideshowSection = document.getElementById("slideshowSection");
@@ -122,59 +125,47 @@
     const slideImg = document.getElementById("slideImg");
 
     const bgm = document.getElementById("bgm");
-    bgm.volume = 0.7;
+    bgm.volume = 0.9;
 
-    // Use ONE stable music file (recommended)
-    // Make sure this file exists in your repo root: /music.m4a
-    const MUSIC_FILE = "./music.m4a";
-
-    // ===== Cache-safe music start (works for all users) =====
-    async function startMusic(force = false) {
+    // ✅ Reliable play function (no cache-busting, correct path already in <source>)
+    async function startMusic() {
       try {
-        if (!force && !bgm.paused) return;
-
-        // Reset stuck audio states (helps when reopened)
         bgm.pause();
         bgm.currentTime = 0;
-
-        // Cache-bust to avoid stale cached audio
-        bgm.src = MUSIC_FILE + "?v=" + Date.now();
-        bgm.load();
-
         await bgm.play();
       } catch (e) {
-        // If blocked, next user tap will start it
+        console.log("Music blocked until next tap:", e);
       }
     }
 
-    // Global fallback: first touch/click anywhere can start audio if needed
-    document.addEventListener("touchstart", () => startMusic(true), { once: true });
-    document.addEventListener("click", () => startMusic(true), { once: true });
+    // Optional fallback: if browser blocks, next tap anywhere will start it
+    document.addEventListener("touchstart", () => startMusic(), { once: true });
+    document.addEventListener("click", () => startMusic(), { once: true });
 
-    // If already unlocked in same browser, go directly to quotes (music will start on first tap)
+    // If already unlocked previously, show quotes (music will start on first tap)
     if (localStorage.getItem("birthday_access") === "yes") {
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
-      // show next after 15s
       setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
     }
 
     function unlockAndShowQuotes() {
       errEl.style.display = "none";
+
       const userDOB = normalizeDOB(dobInput.value.trim());
       if (userDOB !== CORRECT_DOB) {
         errEl.style.display = "block";
         return;
       }
+
       localStorage.setItem("birthday_access", "yes");
 
-      // Start music immediately on the Unlock click (mobile-friendly)
-      startMusic(true);
+      // ✅ Start music on Unlock click (mobile-friendly)
+      startMusic();
 
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
 
-      // Next button appears after 15 seconds
       nextBtn.style.display = "none";
       setTimeout(() => {
         nextBtn.style.display = "inline-block";
@@ -186,7 +177,7 @@
       if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
     });
 
-    // ===== Photos (your list kept; encodeURI used while setting src) =====
+    // ===== Photos =====
     const images = [
       "./photos/1.jpg",
       "./photos/2.jpg",
@@ -239,7 +230,6 @@
     }
 
     function startSlideshow() {
-      // reset slideshow counters
       idx = 0;
       shown = 1;
       slideImg.src = encodeURI(images[0]);
@@ -256,7 +246,7 @@
 
     nextBtn.addEventListener("click", () => {
       // keep music running
-      startMusic(true);
+      startMusic();
 
       quotesSection.classList.add("hidden");
       slideshowSection.classList.remove("hidden");
