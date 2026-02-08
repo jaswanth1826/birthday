@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Birthday Surprise 💕</title>
-  <link rel="stylesheet" href="style.css?v=1" />
+  <link rel="stylesheet" href="style.css?v=2" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -15,9 +15,9 @@
 </head>
 
 <body class="quotes-page">
-  <!-- ✅ Music file is inside /music folder: /music/music.mp3 -->
+  <!-- ✅ Use the file that you CONFIRMED exists on GitHub Pages: /music.mp3 (repo root) -->
   <audio id="bgm" preload="auto" playsinline loop>
-    <source src="./music/music.mp3" type="audio/mp4">
+    <source src="./music.mp3" type="audio/mpeg">
   </audio>
 
   <!-- ====== SECTION 0: DOB FORM ====== -->
@@ -102,7 +102,6 @@
   <script>
     // ===== DOB =====
     const CORRECT_DOB = "2000-02-10";
-
     function normalizeDOB(value) {
       if (!value) return "";
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
@@ -127,26 +126,35 @@
     const bgm = document.getElementById("bgm");
     bgm.volume = 0.9;
 
-    // ✅ Reliable play function (no cache-busting, correct path already in <source>)
-    async function startMusic() {
+    // ✅ Robust music start: reload + wait a moment + play
+    async function startMusic(force = false) {
       try {
+        // If already playing and not forcing, exit
+        if (!force && !bgm.paused) return;
+
+        // Reset
         bgm.pause();
         bgm.currentTime = 0;
+
+        // Make sure source is loaded
+        bgm.load();
+
+        // Try play
         await bgm.play();
       } catch (e) {
-        console.log("Music blocked until next tap:", e);
+        console.log("Music play blocked/failed:", e);
       }
     }
 
-    // Optional fallback: if browser blocks, next tap anywhere will start it
-    document.addEventListener("touchstart", () => startMusic(), { once: true });
-    document.addEventListener("click", () => startMusic(), { once: true });
-
-    // If already unlocked previously, show quotes (music will start on first tap)
+    // If user already unlocked previously, show quotes (music will start on first tap)
     if (localStorage.getItem("birthday_access") === "yes") {
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
       setTimeout(() => { nextBtn.style.display = "inline-block"; }, 15000);
+
+      // Optional: start music on first interaction
+      document.addEventListener("touchstart", () => startMusic(true), { once: true });
+      document.addEventListener("click", () => startMusic(true), { once: true });
     }
 
     function unlockAndShowQuotes() {
@@ -160,8 +168,8 @@
 
       localStorage.setItem("birthday_access", "yes");
 
-      // ✅ Start music on Unlock click (mobile-friendly)
-      startMusic();
+      // ✅ MUST be called directly inside this click for mobile autoplay
+      startMusic(true);
 
       dobSection.classList.add("hidden");
       quotesSection.classList.remove("hidden");
@@ -176,6 +184,10 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !dobSection.classList.contains("hidden")) unlockAndShowQuotes();
     });
+
+    // Also allow a tap anywhere to start if browser blocked it
+    document.addEventListener("touchstart", () => startMusic(true), { once: true });
+    document.addEventListener("click", () => startMusic(true), { once: true });
 
     // ===== Photos =====
     const images = [
@@ -245,8 +257,7 @@
     }
 
     nextBtn.addEventListener("click", () => {
-      // keep music running
-      startMusic();
+      startMusic(true); // keep music alive
 
       quotesSection.classList.add("hidden");
       slideshowSection.classList.remove("hidden");
